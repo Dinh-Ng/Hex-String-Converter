@@ -2,33 +2,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // Lấy các phần tử DOM
   const textInput = document.getElementById('textInput');
   const hexInput = document.getElementById('hexInput');
-  const textToHexBtn = document.getElementById('textToHex');
-  const hexToTextBtn = document.getElementById('hexToText');
   const clearAllBtn = document.getElementById('clearAll');
   const copyTextBtn = document.getElementById('copyText');
   const copyHexBtn = document.getElementById('copyHex');
-
-  // Chuyển đổi từ văn bản sang hex
-  textToHexBtn.addEventListener('click', function() {
-    const text = textInput.value;
-    if (text) {
-      const hex = textToHex(text);
-      hexInput.value = hex;
-    }
-  });
-
-  // Chuyển đổi từ hex sang văn bản
-  hexToTextBtn.addEventListener('click', function() {
-    const hex = hexInput.value.trim();
-    if (hex) {
-      try {
-        const text = hexToText(hex);
-        textInput.value = text;
-      } catch (e) {
-        alert('Mã hex không hợp lệ. Vui lòng kiểm tra lại.');
-      }
-    }
-  });
 
   // Xóa tất cả nội dung
   clearAllBtn.addEventListener('click', function() {
