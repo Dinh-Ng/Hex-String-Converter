@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Hex-Text Converter",
+  "version": "1.2",
+  "description": "Chuyển đổi giữa mã hex và văn bản, hỗ trợ menu chuột phải",
+  "permissions": ["contextMenus", "scripting", "storage", "activeTab", "<all_urls>"],
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}
