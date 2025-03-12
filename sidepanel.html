@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hex-Text Converter</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        width: 100%;
+        padding: 15px;
+        background-color: #f5f5f5;
+        margin: 0;
+        box-sizing: border-box;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      h3 {
+        text-align: center;
+        color: #333;
+        margin-top: 0;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #4285f4;
+        padding-bottom: 8px;
+      }
+
+      .section {
+        margin-bottom: 15px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .section-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #555;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      textarea {
+        width: 100%;
+        flex-grow: 1;
+        margin-bottom: 10px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+        font-family: monospace;
+        box-sizing: border-box;
+        min-height: 120px;
+      }
+
+      .button-group {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+      }
+
+      button {
+        padding: 8px 12px;
+        background-color: #4285f4;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #3367d6;
+      }
+
+      .copy-btn {
+        background-color: #34a853;
+        font-size: 0.8em;
+        padding: 3px 8px;
+      }
+
+      .copy-btn:hover {
+        background-color: #2e8b57;
+      }
+
+      .content-container {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 60px);
+      }
+    </style>
+  </head>
+  <body>
+    <h3>Hex-Text Converter</h3>
+
+    <div class="content-container">
+      <div class="section">
+        <div class="section-title">
+          <span>Văn bản</span>
+          <button class="copy-btn" id="copyText">Sao chép</button>
+        </div>
+        <textarea id="textInput" placeholder="Nhập văn bản..."></textarea>
+      </div>
+
+      <div class="button-group">
+        <button id="clearAll">Xóa tất cả</button>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          <span>Mã Hex</span>
+          <button class="copy-btn" id="copyHex">Sao chép</button>
+        </div>
+        <textarea id="hexInput" placeholder="Nhập mã hex..."></textarea>
+      </div>
+    </div>
+
+    <script src="sidepanel.js"></script>
+  </body>
+</html>

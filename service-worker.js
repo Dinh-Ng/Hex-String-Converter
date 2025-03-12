@@ -95,3 +95,10 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     console.log("WTF???");
   }
 });
+
+// Mở side panel khi click vào icon extension
+chrome.action.onClicked.addListener((tab) => {
+  chrome.sidePanel.open({ tabId: tab.id });
+});
+
+// Thiết lập menu chuột phải và các chức năng khác (nếu có)

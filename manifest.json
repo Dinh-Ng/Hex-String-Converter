@@ -3,14 +3,16 @@
   "name": "Hex-Text Converter",
   "version": "1.2",
   "description": "Chuyển đổi giữa mã hex và văn bản, hỗ trợ menu chuột phải",
-  "permissions": ["contextMenus", "scripting", "storage", "activeTab", "<all_urls>"],
+  "permissions": ["contextMenus", "scripting", "storage", "activeTab", "sidePanel"],
   "background": {
     "service_worker": "service-worker.js",
     "type": "module"
   },
   "action": {
-    "default_popup": "popup.html",
     "default_icon": "icon.png"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
   },
   "icons": {
     "16": "icon.png",
