@@ -17,15 +17,6 @@
         flex-direction: column;
       }
 
-      h3 {
-        text-align: center;
-        color: #333;
-        margin-top: 0;
-        margin-bottom: 15px;
-        border-bottom: 2px solid #4285f4;
-        padding-bottom: 8px;
-      }
-
       .section {
         margin-bottom: 15px;
         flex-grow: 1;
@@ -77,8 +68,9 @@
 
       .copy-btn {
         background-color: #34a853;
-        font-size: 0.8em;
-        padding: 3px 8px;
+        font-size: 1em;
+        padding: 6px 12px;
+        min-width: 100px;
       }
 
       .copy-btn:hover {
@@ -88,13 +80,11 @@
       .content-container {
         display: flex;
         flex-direction: column;
-        height: calc(100vh - 60px);
+        height: 100vh;
       }
     </style>
   </head>
   <body>
-    <h3>Hex-Text Converter</h3>
-
     <div class="content-container">
       <div class="section">
         <div class="section-title">
