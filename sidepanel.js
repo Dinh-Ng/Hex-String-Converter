@@ -1,44 +1,32 @@
-document.addEventListener('DOMContentLoaded', function() {
-  // Lấy các phần tử DOM
-  const textInput = document.getElementById('textInput');
-  const hexInput = document.getElementById('hexInput');
+document.addEventListener('DOMContentLoaded', function () {
+  // ─── Lấy các phần tử DOM ────────────────────────────────────────────────────
+  const textInput   = document.getElementById('textInput');
+  const hexInput    = document.getElementById('hexInput');
   const clearAllBtn = document.getElementById('clearAll');
   const copyTextBtn = document.getElementById('copyText');
-  const copyHexBtn = document.getElementById('copyHex');
+  const copyHexBtn  = document.getElementById('copyHex');
+  const openLinkBtn = document.getElementById('openLink');
 
-  // Tạo nút mở link
-  const openLinkBtn = document.createElement('button');
-  openLinkBtn.id = 'openLink';
-  openLinkBtn.textContent = 'Mở liên kết';
-  openLinkBtn.style.display = 'none';
-  openLinkBtn.style.backgroundColor = '#db4437';
-  openLinkBtn.style.marginLeft = '10px';
-
-  // Thêm nút vào DOM
-  const textSectionTitle = document.querySelector('.section-title');
-  textSectionTitle.appendChild(openLinkBtn);
-
-  // Xóa tất cả nội dung
-  clearAllBtn.addEventListener('click', function() {
+  // ─── Xóa tất cả ─────────────────────────────────────────────────────────────
+  clearAllBtn.addEventListener('click', function () {
     textInput.value = '';
-    hexInput.value = '';
-    openLinkBtn.style.display = 'none';
+    hexInput.value  = '';
+    setOpenLinkVisible(false);
   });
 
-  // Sao chép văn bản
-  copyTextBtn.addEventListener('click', function() {
+  // ─── Sao chép ────────────────────────────────────────────────────────────────
+  copyTextBtn.addEventListener('click', function () {
     copyToClipboard(textInput);
     showCopyFeedback(copyTextBtn);
   });
 
-  // Sao chép mã hex
-  copyHexBtn.addEventListener('click', function() {
+  copyHexBtn.addEventListener('click', function () {
     copyToClipboard(hexInput);
     showCopyFeedback(copyHexBtn);
   });
 
-  // Mở liên kết
-  openLinkBtn.addEventListener('click', function() {
+  // ─── Mở liên kết ─────────────────────────────────────────────────────────────
+  openLinkBtn.addEventListener('click', function () {
     const text = textInput.value.trim();
     if (text && isValidURL(text)) {
       const url = /^https?:\/\//i.test(text) ? text : 'https://' + text;
@@ -46,113 +34,96 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Tự động chuyển đổi khi nhập liệu
-  textInput.addEventListener('input', function() {
+  // ─── Auto-convert khi nhập ───────────────────────────────────────────────────
+  textInput.addEventListener('input', function () {
     if (textInput.value) {
-      const hex = textToHex(textInput.value);
-      hexInput.value = hex;
-
-      // Kiểm tra nếu có URL
+      hexInput.value = textToHex(textInput.value);
       checkForURL(textInput.value);
     } else {
       hexInput.value = '';
-      openLinkBtn.style.display = 'none';
+      setOpenLinkVisible(false);
     }
   });
 
-  hexInput.addEventListener('input', function() {
+  hexInput.addEventListener('input', function () {
     if (hexInput.value) {
       try {
         const text = hexToText(hexInput.value.trim());
         textInput.value = text;
-
-        // Kiểm tra nếu có URL
         checkForURL(text);
-      } catch (e) {
-        // Không hiển thị lỗi khi đang nhập liệu
+      } catch {
+        // Không hiển thị lỗi khi đang nhập dở
       }
     } else {
       textInput.value = '';
-      openLinkBtn.style.display = 'none';
+      setOpenLinkVisible(false);
     }
   });
 
-  // Hàm kiểm tra URL
-  function checkForURL(text) {
-    if (isValidURL(text.trim())) {
-      openLinkBtn.style.display = 'inline-block';
-    } else {
-      openLinkBtn.style.display = 'none';
+  // ─── Tiện ích ────────────────────────────────────────────────────────────────
+
+  /** Kiểm tra URL bằng URL API native của trình duyệt */
+  function isValidURL(str) {
+    try {
+      const urlStr = /^https?:\/\//i.test(str) ? str : 'https://' + str;
+      new URL(urlStr);
+      // Phải có ít nhất 1 dấu chấm để là domain thật (tránh nhận diện từ đơn như "hello")
+      return str.includes('.');
+    } catch {
+      return false;
     }
   }
 
-  // Hàm kiểm tra URL hợp lệ
-  function isValidURL(str) {
-    const pattern = new RegExp(
-      '^(https?:\\/\\/)?' + // protocol
-      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-      '(\\#[-a-z\\d_]*)?$',
-      'i'
-    ); // fragment locator
-    return !!pattern.test(str);
+  function checkForURL(text) {
+    setOpenLinkVisible(isValidURL(text.trim()));
   }
 
-  // Hàm chuyển đổi văn bản sang hex
+  /** Ẩn/hiện nút "Mở liên kết" bằng CSS class (không dùng inline style) */
+  function setOpenLinkVisible(visible) {
+    openLinkBtn.classList.toggle('hidden', !visible);
+  }
+
   function textToHex(text) {
     let hex = '';
     for (let i = 0; i < text.length; i++) {
-      const charCode = text.charCodeAt(i);
-      const hexValue = charCode.toString(16);
-      hex += hexValue.padStart(2, '0');
+      hex += text.charCodeAt(i).toString(16).padStart(2, '0');
     }
     return hex;
   }
 
-  // Hàm chuyển đổi hex sang văn bản
   function hexToText(hex) {
-    // Loại bỏ khoảng trắng và kiểm tra tính hợp lệ
     hex = hex.replace(/\s+/g, '');
     if (!/^[0-9A-Fa-f]+$/.test(hex)) {
       throw new Error('Invalid hex string');
     }
-
-    // Đảm bảo độ dài chuỗi hex là chẵn
-    if (hex.length % 2 !== 0) {
-      hex = '0' + hex;
-    }
+    if (hex.length % 2 !== 0) hex = '0' + hex;
 
     let text = '';
     for (let i = 0; i < hex.length; i += 2) {
-      const charCode = parseInt(hex.substr(i, 2), 16);
-      text += String.fromCharCode(charCode);
+      text += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
     }
     return text;
   }
 
-  // Hàm sao chép vào clipboard
   function copyToClipboard(element) {
     element.select();
     document.execCommand('copy');
-    window.getSelection().removeAllRanges();
+    window.getSelection()?.removeAllRanges();
   }
 
-  // Hiển thị phản hồi khi sao chép
   function showCopyFeedback(button) {
     const originalText = button.textContent;
-    button.textContent = 'Đã sao chép!';
-    button.style.backgroundColor = '#28a745';
+    button.textContent = '✓ Đã sao chép!';
+    button.classList.add('copied');
 
     setTimeout(() => {
       button.textContent = originalText;
-      button.style.backgroundColor = '';
+      button.classList.remove('copied');
     }, 1500);
   }
 
-  // Khôi phục trạng thái từ lần sử dụng trước
-  chrome.storage.local.get(['textValue', 'hexValue'], function(result) {
+  // ─── Khôi phục trạng thái ────────────────────────────────────────────────────
+  chrome.storage.local.get(['textValue', 'hexValue'], function (result) {
     if (result.textValue) {
       textInput.value = result.textValue;
       checkForURL(result.textValue);
@@ -160,11 +131,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (result.hexValue) hexInput.value = result.hexValue;
   });
 
-  // Lưu trạng thái khi đóng sidepanel
-  window.addEventListener('beforeunload', function() {
+  // ─── Lưu trạng thái khi đóng ─────────────────────────────────────────────────
+  window.addEventListener('beforeunload', function () {
     chrome.storage.local.set({
       textValue: textInput.value,
-      hexValue: hexInput.value
+      hexValue:  hexInput.value,
     });
   });
 });
